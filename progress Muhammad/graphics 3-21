@@ -1,0 +1,36 @@
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import javax.sound.sampled.*;
+public class graphics extends JFrame{
+
+    private static final int WIDTH = 2400;
+    private static final int HEIGHT = 1200;
+
+    public graphics() throws Exception{
+        this.setTitle("Missile Command");
+        Dimension d = new Dimension(WIDTH, HEIGHT);
+        JPanel jp = new JPanel();
+        ImageIcon osama = new ImageIcon("nikita.png");
+        JLabel back = new JLabel(new ImageIcon("city.png"));
+
+        this.setIconImage(osama.getImage());
+        jp.setSize(d);
+        jp.add(back);
+        this.setSize(d);
+
+        this.setResizable(false);
+        this.add(jp);
+        this.setVisible(true);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        try{
+            new soundRunner("russianAnthemPhonk CON.wav");
+        }
+        catch(UnsupportedAudioFileException | IOException | LineUnavailableException ignored){
+
+        }
+    }
+    public static void main(String[] args) throws Exception {
+        graphics g = new graphics();
+    }
+}
