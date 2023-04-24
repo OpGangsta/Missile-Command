@@ -1,0 +1,70 @@
+import java.awt.*;
+import java.util.Random;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+
+public class fallingObject extends JPanel {
+    private int x;
+    private int y = 0;
+    private double velocity = 0;
+    private double acceleration = 9.81;
+    private int  random;
+    private int minus = 0;
+    private JFrame f;
+    public fallingObject(JFrame frame) {
+        f = frame;
+        x = new Random().nextInt(2560)-1;
+        random = new Random().nextInt(2+1)-1;
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setColor(Color.BLACK);
+        g2d.fillOval(x, y, 20, 20);
+    }
+
+    private void doDrawing() {
+        Timer timer = new Timer(20, (e) -> { 
+            velocity += acceleration * 0.02; // dt = 0.02 seconds
+            if(y < 1440) {
+                y += velocity * .5; // scale velocity by 20 for visual effect
+                x += velocity * random;
+            }
+            else {
+                killed();
+                this.minuslife();
+            }
+            repaint();
+        });
+        timer.start();
+    }
+    private void minuslife() {
+        minus ++;
+    }
+    private int getLifetaken() {
+        return minus;
+    }
+    private void killed() {
+        f.remove(this);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Falling Object Animation");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(2560, 1440);
+            frame.setBackground(Color.BLACK);
+            frame.setLocationRelativeTo(null);
+            fallingObject object = new fallingObject(frame);
+            frame.add(object);
+            object.doDrawing();
+            frame.setVisible(true);
+        });
+    }
+}
